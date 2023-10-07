@@ -69,9 +69,9 @@ function nextPage() {
             startReaderTest(0);
             break;
 
-            case 4:
-                startRecordingTest();
-                break;
+        case 4:
+            startRecordingTest();
+            break;
 
         case 6:
             var barcodeInput = document.getElementById("barcode_con_input");
@@ -325,7 +325,7 @@ function clearVideo(i) {
     }
 }
 
-function closeCanvas(){
+function closeCanvas() {
     canvasPanel.style.display = 'none';
 }
 
@@ -534,9 +534,9 @@ var startRecordingButton = document.getElementById('start-recording');
 var stopRecordingButton = document.getElementById('stop-recording');
 var audioContainer = document.getElementById('audio-container');
 
-function startRecordingTest(){
+function startRecordingTest() {
     audioPlayer.src = "./assets/ringing.wav";
-    audioPlayer.startPlay();
+    audioPlayer.play();
 }
 
 
@@ -570,6 +570,22 @@ function stopRecording() {
         mediaRecorder.stop();
         startRecordingButton.disabled = false;
         stopRecordingButton.disabled = true;
+    }
+}
+
+function recordTestResultSubmit(testResult) {
+    switch (testResult) {
+        case 0:
+            testResultSubmit(0);
+            break;
+        case -1:
+            testResultT.value = "扬声器故障";
+            testResultSubmit(-1);
+            break;
+        case -2:
+            testResultT.value = "录音设备故障";
+            testResultSubmit(-1);
+            break;
     }
 }
 
