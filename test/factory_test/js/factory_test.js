@@ -171,10 +171,10 @@ var video = document.getElementsByClassName('video_camera');
 var livePreviewType = 0;
 // 双目摄像头
 var live_device_select_list = [];
-var liveCanvas = document.getElementsByClassName('canvas_camera');
+var liveCanvas = document.getElementById('canvas_camera');
 var resoluteSpan = document.getElementsByClassName('resolute_span');
 
-var liveCtx = [];
+var liveCtx;
 var cameraMax = 2;
 var cameraInfo;
 var stream_ = [];
@@ -183,9 +183,8 @@ var videoSelect = [];
 
 // 播放视频回调
 function takePictureEvnt(i) {
-    video[i].style.display = 'none';
-    liveCanvas[i].style.display = 'block';
-    liveCtx = liveCanvas[i].getContext("2d");
+    document.getElementById('canvas_panel').style.display = 'block';
+    liveCtx = liveCanvas.getContext("2d");
     liveCtx.drawImage(video[i], 0, 0, defaultCameraWidth[i], defaultCameraHeight[i]);
 }
 

@@ -127,6 +127,7 @@ body {
 
 .contain_main_item_dual_camera {
     min-width: 1350px;
+    position: relative;
 }
 
 .main_button {
@@ -146,7 +147,7 @@ body {
     height: 480px;
     background-color: #666;
     margin: 5px;
-    display: none;
+    display: block;
 }
 
 .video_camera {
@@ -154,6 +155,16 @@ body {
     height: 480px;
     background-color: #666;
     margin: 5px;
+}
+
+.canvas_panel {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    padding-top: 50px;
+    z-index: 10;
+    position: absolute;
+    display: none;
 }
 
 .panel_camera {
@@ -165,7 +176,7 @@ body {
     border-radius: 8px;
 }
 
-.resolute_span{
+.resolute_span {
     width: 150px;
     font-size: 18px;
     display: inline-block;
@@ -173,14 +184,14 @@ body {
     border-radius: 6px;
 }
 
-.device_select{
+.device_select {
     width: 200px;
     font-size: 18px;
     display: inline-block;
     margin: 0 20px 0 0;
 }
 
-#textarea_test_camera_result{
+#textarea_test_camera_result {
     height: 100px;
 }
 
@@ -196,7 +207,7 @@ body {
     display: none;
 }
 
-#textarea_test_sign_result{
+#textarea_test_sign_result {
     height: 100px;
 }
 

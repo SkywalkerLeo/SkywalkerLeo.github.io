@@ -49,50 +49,52 @@
 
         <!-- 活体摄像头测试 -->
         <div class="contain_main_item contain_main_item_dual_camera">
-            <h1>活体摄像头测试</h1>
+            <div style="position: absolute;">
+                <h1>活体摄像头测试</h1>
 
-            <div>
-                <video class="video_camera"></video>
-                <video class="video_camera"></video>
-            </div>
+                <div>
+                    <div>
+                        <video class="video_camera"></video>
+                        <video class="video_camera"></video>
+                    </div>
+                </div>
+                <div style="width: 100%; text-align: center;">
+                    <div class="panel_camera">
+                        <select id="device_select" class="device_select" onchange="selectCamera(this.value, 0)">
+                        </select>
 
-            <div style="z-index: 100;">
-                <canvas class="canvas_camera" id="canvas_camera_rgb"></canvas>
-                <canvas class="canvas_camera" id="canvas_camera_ir"></canvas>
-            </div>
+                        <div class="resolute_span" id="resolute_span">
+                            分辨率
+                        </div>
 
-            <div style="width: 100%; text-align: center;">
-                <div class="panel_camera">
-                    <select id="device_select" class="device_select" onchange="selectCamera(this.value, 0)">
-                    </select>
+                        <button class="default_mbtn main_button" onclick="takePictureEvnt(0)">拍照</button>
 
-                    <div class="resolute_span" id="resolute_span">
-                        分辨率
                     </div>
 
-                    <button class="default_mbtn main_button" onclick="takePictureEvnt(0)">拍照</button>
+                    <div class="panel_camera">
+                        <select id="device_select_second" class="device_select" onchange="selectCamera(this.value, 1)">
+                        </select>
 
+                        <div class="resolute_span" id="resolute_span_second">
+                            分辨率
+                        </div>
+
+                        <button class="default_mbtn main_button" onclick="takePictureEvnt(1)">拍照</button>
+
+                    </div>
                 </div>
 
-                <div class="panel_camera">
-                    <select id="device_select_second" class="device_select" onchange="selectCamera(this.value, 1)">
-                    </select>
+                <textarea class="textarea_test_result" id="textarea_test_camera_result"
+                    placeholder="测试结果补充说明..."></textarea>
 
-                    <div class="resolute_span" id="resolute_span_second">
-                        分辨率
-                    </div>
-
-                    <button class="default_mbtn main_button" onclick="takePictureEvnt(1)">拍照</button>
-
+                <div>
+                    <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">不通过</button>
+                    <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
                 </div>
             </div>
-
-            <textarea class="textarea_test_result" id="textarea_test_camera_result"
-                placeholder="测试结果补充说明..."></textarea>
-
-            <div>
-                <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">不通过</button>
-                <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
+            <div class="canvas_panel" id="canvas_panel">
+                <canvas class="canvas_camera" id="canvas_camera"></canvas>
+                <button class="default_mbtn main_button" onclick="closeCanvas()">关闭</button>
             </div>
         </div>
 
