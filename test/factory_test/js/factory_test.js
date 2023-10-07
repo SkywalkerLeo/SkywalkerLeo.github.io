@@ -6,7 +6,7 @@ var testResultT;  // 当前测试项的文本框
 /**
  * 测试步骤：0-默认， 1-屏幕， 2-活体摄像头， 3-读证卡， 4-录音， 5-签字， 6-扫码
  */
-var testStep = 0;
+var testStep = 3;
 var testStepMax = 6;
 var stepPostion = 0;
 
@@ -73,10 +73,12 @@ function nextPage() {
             startRecordingTest();
             break;
 
+        case 5:
+            startSignTest();
+            break;
+
         case 6:
-            var barcodeInput = document.getElementById("barcode_con_input");
-            barcodeInput.value = "";
-            barcodeInput.focus = true;
+            startBarcodeScannerTest();
             break;
     }
 }
@@ -535,8 +537,9 @@ var stopRecordingButton = document.getElementById('stop-recording');
 var audioContainer = document.getElementById('audio-container');
 
 function startRecordingTest() {
+    //先播放预设音频
     audioPlayer.src = "./assets/ringing.wav";
-    audioPlayer.play();
+    audioPlayer.onloadedmetadata = event => { audioPlayer.play(); };
 }
 
 
@@ -574,6 +577,7 @@ function stopRecording() {
 }
 
 function recordTestResultSubmit(testResult) {
+    audioPlayer.pause();
     switch (testResult) {
         case 0:
             testResultSubmit(0);
@@ -599,6 +603,188 @@ function recordTestResultSubmit(testResult) {
  */
 
 
+// 画板宽高
+var iWidth = 800;
+var iHeight = 490;
+//设备宽高
+var deviceHeight = 0,
+    deviceWidth = 0,
+    deviceX = 0,
+    deviceY = 0;
+var startSign = false; // 签字状态
+var canvasSign, ctxSign;
+var isFirst = false;
+var signData = "";
+var points = []; //
+
+function startSignTest() {
+    canvasCreate();
+    goSignEvent();
+}
+
+// 创建画布
+function canvasCreate() {
+    canvasSign = document.getElementById("signCanvas");
+    canvasSign.width = iWidth;
+    canvasSign.height = iHeight;
+    ctxSign = canvasSign.getContext("2d");
+    ctxSign.fillStyle = "#fff";
+    ctxSign.fillRect(0, 0, iWidth, iHeight);
+    ctxSign.strokeStyle = "#000"; // 线条颜色
+    ctxSign.lineWidth = 3;
+    ctxSign.lineCap = "round"; // 线条末端添加圆形线帽，减少线条的生硬感
+    ctxSign.lineJoin = "round"; // 线条交汇时为原型边角
+    // 利用阴影，消除锯齿
+    ctxSign.shadowBlur = 1; //线条阴影大小
+    ctxSign.shadowColor = "#000"; //线条阴影颜色
+    canvasSign.style.display = "inline-block";
+    document.getElementById("canvasImg").style.display = "none";
+}
+// 点击签名
+function goSignEvent() {
+    sign.sSignOpen(0, signData, function (res) {
+        console.log("打开设备的返回", res);
+        if (res.err_code == 0) {
+            var cmd = res.cmd;
+            switch (cmd) {
+                case "get_device_info": //设备信息
+                    deviceWidth = res.data.sign_rect_w;
+                    deviceHeight = res.data.sign_rect_h;
+                    deviceX = res.data.sign_rect_x;
+                    deviceY = res.data.sign_rect_y;
+                    //获取签字坐标
+                    sign.sGetCoordinate(getCoordinateCallback);
+                    break;
+                // case 'open_device': //打开设备
+                //     service.getCoordinate(getCoordinateCallback);
+                //     break
+                case "start_get_coordinate":
+                    this.canvasCreate();
+                    break;
+                case "sign_pic": //签名
+                    //下载图片
+                    var content = "data:image/png;base64," + res.sign_pic_data;
+                    var myDate = new Date();
+                    var hh = myDate.getHours(); //获取系统时，
+                    var mm = myDate.getMinutes(); //分
+                    var ss = myDate.getSeconds(); //秒
+                    var fileName = "photo_" + hh + mm + ss;
+                    downloadFile(content, fileName);
+
+                    break;
+                case "revived_sign": //重签
+                    againSignCallback();
+                    break;
+                case "sign_cancel": //取消
+                    testResultT.value += "取消签名：" + JSON.stringify(res) + "\r\n";
+                    break;
+            }
+        } else {
+            testResultT.value += "打开签名设备：" + JSON.stringify(res) + "\r\n";
+        }
+    });
+}
+
+function getCoordinateCallback(res) {
+    // console.log("获取坐标", res);
+    if (res.err_code == 0) {
+        var signStatus = res.data.status;
+
+        var xInit = res.data.x;
+        var yInit = res.data.y;
+        var xSign, ySign;
+        xSign = (iWidth * xInit) / deviceWidth;
+        ySign = (iHeight * yInit) / deviceHeight;
+
+
+        switch (signStatus) {
+            case 161:
+                if (xInit > deviceWidth || yInit > deviceHeight) {
+                    // 服务可能返回异常坐标（超签字区域范围）,只加载正常坐标
+                    break;
+                }
+                startSign = true;
+                document.getElementById("signSave").classList.add("sign_active");
+                document.getElementById("signReset").classList.add("sign_active");
+                if (isFirst) {
+                    points.push({
+                        xSign: xSign,
+                        ySign: ySign,
+                    });
+
+                    if (points.length > 3) {
+                        var lastTwoPoints = points.slice(-2);
+                        var controlPoint = lastTwoPoints[0];
+                        var endPoint = {
+                            xSign: (lastTwoPoints[0].xSign + lastTwoPoints[1].xSign) / 2,
+                            ySign: (lastTwoPoints[0].ySign + lastTwoPoints[1].ySign) / 2,
+                        };
+                        // console.log('绘制中', beginPoint, endPoint)
+                        drawLine(beginPoint, controlPoint, endPoint);
+                        beginPoint = endPoint;
+                        // console.log('坐标订单的的', beginPoint)
+                    }
+                } else {
+                    // console.log('开始绘制')
+                    isFirst = true;
+                    document.getElementById("signSave").classList.add("sign_active");
+                    document.getElementById("signReset").classList.add("sign_active");
+                    points.push({
+                        xSign: xSign,
+                        ySign: ySign,
+                    });
+                    beginPoint = {
+                        xSign: xSign,
+                        ySign: ySign,
+                    };
+                }
+                break;
+            case 128:
+                if (xInit <= deviceWidth && yInit <= deviceHeight) {
+                    // 服务可能返回异常坐标（超签字区域范围）,只加载正常坐标
+                    points.push({
+                        xSign: xSign,
+                        ySign: ySign,
+                    });
+                }
+                if (points.length > 3) {
+                    var lastTwoPoints = points.slice(-2);
+                    var controlPoint = lastTwoPoints[0];
+                    var endPoint = lastTwoPoints[1];
+                    drawLine(beginPoint, controlPoint, endPoint);
+                }
+                isFirst = false;
+                beginPoint = null;
+                isDown = false;
+                points = [];
+                // console.log('结束绘制')
+                break;
+        }
+    } else {
+        textarea.value += "获取坐标：" + JSON.stringify(res) + "\r\n";
+        textarea.scrollTop = textarea.scrollHeight;
+    }
+}
+
+function drawLine(beginPoint, controlPoint, endPoint) {
+    // console.log('坐标', beginPoint)
+    ctxSign.beginPath();
+    ctxSign.moveTo(beginPoint.xSign, beginPoint.ySign);
+    ctxSign.quadraticCurveTo(
+        controlPoint.xSign,
+        controlPoint.ySign,
+        endPoint.xSign,
+        endPoint.ySign
+    );
+    ctxSign.stroke();
+    ctxSign.closePath();
+}
+
+// 外接设备重新签名回调
+function againSignCallback() {
+    startSign = false;
+    canvasCreate();
+}
 
 /**
  * 签字测试 -end
@@ -610,10 +796,11 @@ function recordTestResultSubmit(testResult) {
  */
 
 var barcodeBrochureStr = "asdfghjkl1234567890-.+=";
+var barcodeScannerInput = document.getElementById("barcode_con_input");
 
 function barcodeInput(event) {
     if (event.keyCode == 13) {
-        var inputStr = document.getElementById("barcode_con_input").value;
+        var inputStr = barcodeScannerInput.value;
         inputStr = trim(inputStr);
         inputStr = inputStr.replace("\r\n", "");
         if (inputStr == barcodeBrochureStr) {
@@ -625,6 +812,10 @@ function barcodeInput(event) {
     } else {
 
     }
+}
+
+function startBarcodeScannerTest(){
+    barcodeScannerInput.focus();
 }
 
 /**

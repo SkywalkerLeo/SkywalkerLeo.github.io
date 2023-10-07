@@ -27,14 +27,14 @@ var sign = {
   sSignOpen: function (sign_status, sign_data, ssignOpencallback) {
     param = {
       signData:sign_data,
-      signFileType:signFileType,
-      signUrl:signUrl,
+      signFileType:this.signFileType,
+      signUrl:this.signUrl,
     }
 
     sign.status= sign_status;
     sign.signData = sign_data;
-    sign.signFileType = signFileType;
-    sign.signUrl = signUrl;
+    sign.signFileType = this.signFileType;
+    sign.signUrl = this.signUrl;
 
 
     if (signutil.signWsStatus) {
