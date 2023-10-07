@@ -1,0 +1,194 @@
+<HTML>
+
+<HEAD>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>工厂测试页面</title>
+    <script type="text/javascript" src="../../js/serviceConfig.js"></script>
+    <script type="text/javascript" src="../../js/takePhoto.js"></script>
+    <script type="text/javascript" src="../../js/videoWebsocket.js"></script>
+    <script type="text/javascript" src="../../js/card.js"></script>
+    <script type="text/javascript" src="../../js/cardWebsocket.js"></script>
+    <script type="text/javascript" src="../../js/sign.js"></script>
+    <script type="text/javascript" src="../../js/signWebsocket.js"></script>
+    <script type="text/javascript" src="../../js/readcert.js"></script>
+    <script type="text/javascript" src="../../js/liveWebsocket.js"></script>
+    <script type="text/javascript" src="../../js/liveCheck.js"></script>
+
+
+    <script type="text/javascript" src="../../jquery/jquery-1.9.1.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/factory_test.css">
+    </link>
+
+</HEAD>
+
+<BODY>
+    <div class="contain_main">
+        <!-- 首页 -->
+        <div class="contain_main_item"
+            style="display: block; text-align: center; align-items: center; padding-top: 50px;">
+            <button class="default_mbtn main_button" onclick="nextPage()" id="startTestBtn">开始测试</button>
+
+        </div>
+
+
+        <!-- 屏幕测试 -->
+        <div class="contain_main_item">
+            <div id="panel_screen">
+                <div>
+                    <button class="default_mbtn main_button" onclick="toggleFullscreen()">屏幕检测</button>
+                </div>
+
+                <textarea class="textarea_test_result" id="textarea_screen_test" placeholder="测试结果补充说明..."></textarea>
+
+                <div>
+                    <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">不通过</button>
+                    <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- 活体摄像头测试 -->
+        <div class="contain_main_item contain_main_item_dual_camera">
+            <h1>活体摄像头测试</h1>
+
+            <div>
+                <video class="video_camera"></video>
+                <video class="video_camera"></video>
+            </div>
+
+            <div>
+                <canvas class="canvas_camera" id="canvas_camera_rgb"></canvas>
+                <canvas class="canvas_camera" id="canvas_camera_ir"></canvas>
+            </div>
+
+            <div style="width: 100%; text-align: center;">
+                <div class="panel_camera">
+                    <select id="device_select" class="device_select" onchange="selectCamera(this.value, 0)">
+                    </select>
+
+                    <div class="resolute_span" id="resolute_span">
+                        分辨率
+                    </div>
+
+                    <button class="default_mbtn main_button" onclick="takePictureEvnt(0)">拍照</button>
+
+                </div>
+
+                <div class="panel_camera">
+                    <select id="device_select_second" class="device_select" onchange="selectCamera(this.value, 1)">
+                    </select>
+
+                    <div class="resolute_span" id="resolute_span_second">
+                        分辨率
+                    </div>
+
+                    <button class="default_mbtn main_button" onclick="takePictureEvnt(1)">拍照</button>
+
+                </div>
+            </div>
+
+            <textarea class="textarea_test_result" id="textarea_test_camera_result"
+                placeholder="测试结果补充说明..."></textarea>
+
+            <div>
+                <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">不通过</button>
+                <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
+            </div>
+        </div>
+
+        <!-- 读证读卡测试 -->
+        <div class="contain_main_item">
+            <h1>读证读卡测试</h1>
+
+            <div class="reader_tips">
+                <div id="reader_tips"></div>
+            </div>
+
+            <textarea class="textarea_test_result" id="textarea_reader_test" placeholder="测试结果补充说明..."></textarea>
+
+            <div id="btn_group_reader">
+                <button class="default_mbtn main_button" onclick="startReaderTest(0)">重试</button>
+                <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">不通过</button>
+                <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
+            </div>
+
+        </div>
+
+        <!-- 录音测试 -->
+        <div class="contain_main_item">
+            <h1>录音设备测试</h1>
+            <div id="btn_group_record">
+                <h3>点击下面的按钮来测试录音设备：</h3>
+                <button class="default_mbtn main_button" id="start-recording" onclick="startRecording()">开始录音</button>
+                <button class="default_mbtn main_button" id="stop-recording" onclick="stopRecording()"
+                    disabled>停止录音</button>
+                <div id="audio-container" style="display: none;">
+                    <h2>录音播放</h2>
+                    <audio controls id="audio-player"></audio>
+                </div>
+
+            </div>
+            <textarea class="textarea_test_result" id="textarea_record_test" placeholder="测试结果补充说明..."></textarea>
+
+            <div>
+                <button class="default_mbtn main_button" onclick="startRecordTest(0)">重试</button>
+                <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">扬声器故障</button>
+                <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">录音故障</button>
+                <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
+            </div>
+
+        </div>
+
+        <!-- 签字测试 -->
+        <div class="contain_main_item">
+            <h1>签字测试</h1>
+
+            <div class="videoDialog_container">
+                <h3>请在智能终端虚线内签字</h3>
+                <div class="videoDialog_con" id="videoDialog">
+                    <canvas id="signCanvas" class="sign_canvas"></canvas>
+                    <img src="" alt="" id="canvasImg" style="width: 100%; height: 100%; display: none;">
+                </div>
+                <div class="sign_bottom">
+                    <div class="default_mbtn_success main_button" id='signSave' onclick="savePicture()">确认
+                    </div>
+                    <div class="default_mbtn main_button" id="signReset" onclick="againSignEvent()">重签
+                    </div>
+                    <div class="default_mbtn_danger main_button" onclick="signCloseEvent()">取消</div>
+                </div>
+            </div>
+
+            <textarea class="textarea_test_result" id="textarea_sign_test" placeholder="测试结果补充说明..."></textarea>
+
+            <div>
+                <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">不通过</button>
+                <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
+            </div>
+        </div>
+
+        <!-- 扫码测试 -->
+        <div class="contain_main_item">
+            <h1>扫码测试</h1>
+            <div>
+                <h3>请扫描指定二维码</h3>
+                <input type="text" class="barcode_con_input" id="barcode_con_input" onkeyup="barcodeInput(event)" />
+            </div>
+
+            <textarea class="textarea_test_result" id="textarea_barcode_scanner_test"
+                placeholder="测试结果补充说明..."></textarea>
+
+            <div>
+                <button class="default_mbtn_danger main_button" onclick="testResultSubmit(-1)">不通过</button>
+                <button class="default_mbtn_success main_button" onclick="testResultSubmit(0)">通过</button>
+            </div>
+
+        </div>
+    </div>
+</BODY>
+
+<script type="text/javascript" src="js/factory_test.js"></script>
+
+</HTML>

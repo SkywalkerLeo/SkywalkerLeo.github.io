@@ -1,0 +1,227 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.default_mbtn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1e29c4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.4s;
+}
+
+.default_mbtn:hover {
+    background-color: #151e9e;
+}
+
+.default_mbtn:active {
+    background-color: #11198f;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.default_mbtn_warning {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #fcd337;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.4s;
+}
+
+.default_mbtn_warning:hover {
+    background-color: #e7ba18;
+}
+
+.default_mbtn_warning:active {
+    background-color: #e4b407;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.default_mbtn_danger {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #e61c1c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.4s;
+}
+
+.default_mbtn_danger:hover {
+    background-color: #d31d1d;
+}
+
+.default_mbtn_danger:active {
+    background-color: #b41717;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.default_mbtn_success {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.4s;
+}
+
+.default_mbtn_success:hover {
+    background-color: #45a049;
+}
+
+.default_mbtn_success:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.textarea_test_result {
+    max-width: 500px;
+    height: 100px;
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    font-family: '微软雅黑';
+    border: #fcd337 1px solid;
+    border-radius: 8px;
+}
+
+.contain_main {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+.contain_main_item {
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.contain_main_item_dual_camera {
+    min-width: 1350px;
+}
+
+.main_button {
+    align-items: center;
+    margin: 20px;
+    font-size: large;
+    font-weight: 800;
+    min-width: 140px;
+}
+
+#textarea_screen_test {
+    margin-top: 40px;
+}
+
+.canvas_camera {
+    width: 640px;
+    height: 480px;
+    background-color: #666;
+    margin: 5px;
+    display: none;
+}
+
+.video_camera {
+    width: 640px;
+    height: 480px;
+    background-color: #666;
+    margin: 5px;
+}
+
+.panel_camera {
+    width: 640px;
+    height: 90px;
+    text-align: center;
+    display: inline-block;
+    border: #000000 1px dashed;
+    border-radius: 8px;
+}
+
+.resolute_span{
+    width: 150px;
+    font-size: 18px;
+    display: inline-block;
+    border: #7e7c7c 1px dashed;
+    border-radius: 6px;
+}
+
+.device_select{
+    width: 200px;
+    font-size: 18px;
+    display: inline-block;
+    margin: 0 20px 0 0;
+}
+
+#textarea_test_camera_result{
+    height: 100px;
+}
+
+.sign_canvas {
+    width: 640px;
+    height: 480px;
+    margin: 5px;
+    border: #000000 1px dashed;
+    border-radius: 8px;
+}
+
+.sign_bottom {
+    display: none;
+}
+
+#textarea_test_sign_result{
+    height: 100px;
+}
+
+.barcode_con_input {
+    margin-top: 7px;
+    width: 300px;
+    height: 36px;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    opacity: 1;
+    border-radius: 5px;
+    outline: none;
+    padding: 0 12px;
+    color: #333333;
+    font-size: 15px;
+}
+
+#textarea_barcode_scanner_test {
+    margin: 40px 0 40px 0;
+}
+
+.reader_tips {
+    text-align: center;
+    margin: 50px 0 50px 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #da6403;
+}

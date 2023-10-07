@@ -38,3 +38,7 @@ function getPic() {
       };
       xhr.send();
 }
+
+function test() {
+    document.location.href = "./test/factory_test/factory_test.html";
+}
