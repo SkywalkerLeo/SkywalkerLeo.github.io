@@ -207,7 +207,7 @@ function getStream(i) {
 
     var deviceId = cameraInfo[i].camera_name;
     videoSelect.forEach(function (v) {
-        if (v.label.startWith(deviceId)) {
+        if (v.label.indexOf(deviceId) == 0) {
             deviceId = v.deviceId;
         }
     })
