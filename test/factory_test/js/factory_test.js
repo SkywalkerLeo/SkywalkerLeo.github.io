@@ -180,6 +180,7 @@ var cameraInfo;
 var stream_ = [];
 var defaultCameraWidth = [], defaultCameraHeight = [];
 var videoSelect = [];
+var canvasPanel = document.getElementById('canvas_panel');
 
 // 播放视频回调
 function takePictureEvnt(i) {
@@ -316,6 +317,10 @@ function clearVideo(i) {
             stream_[i].getVideoTracks()[0].stop(); // then stop the first video track of the stream
         }
     }
+}
+
+function closeCanvas(){
+    canvasPanel.style.display = 'none';
 }
 
 /**
