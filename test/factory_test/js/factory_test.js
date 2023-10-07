@@ -185,8 +185,10 @@ var canvasPanel = document.getElementById('canvas_panel');
 // 播放视频回调
 function takePictureEvnt(i) {
     document.getElementById('canvas_panel').style.display = 'block';
+    liveCanvas.setAttribute("width", defaultCameraWidth[i]);
+    liveCanvas.setAttribute("height", defaultCameraHeight[i]);
     liveCtx = liveCanvas.getContext("2d");
-    liveCtx.drawImage(video[i], 0, 0);
+    liveCtx.drawImage(video[i], 0, 0, defaultCameraWidth[i], defaultCameraHeight[i]);
 }
 
 function getStream(i) {
