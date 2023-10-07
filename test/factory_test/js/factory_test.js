@@ -205,12 +205,18 @@ function getStream(i) {
         console.log('访问用户媒体设备失败' + error);
     }
 
+    var deviceId = cameraInfo[i].camera_name;
+    videoSelect.forEach(function (v) {
+        if (v.label.startWith(deviceId)) {
+            deviceId = v.deviceId;
+        }
+    })
     var constraints = {
         audio: true,
         video: {
             width: defaultCameraWidth[i],
             height: defaultCameraHeight[i],
-            deviceId: { exact: videoSelect[i] }
+            deviceId: { exact: deviceId }
         }
 
     };
@@ -248,7 +254,7 @@ function getVideoInfo() {
             var j = 0;
             for (var i = 0; i < deviceInfos.length; ++i) {
                 if (deviceInfos[i].kind === 'videoinput') {
-                    videoSelect[j] = deviceInfos[i].deviceId;
+                    videoSelect[j] = deviceInfos[i];
                     j++;
                 }
             }
@@ -288,9 +294,8 @@ function readyToCameraTest() {
     //首次运行引导用户，信任域名
     if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
         //调用用户媒体设备, 访问摄像头
-        getUserMedia({ audio: true, video: true }, function () {navigator.mediaDevices.enumerateDevices().then(function(){getVideoInfo();}) }, function () { });
+        navigator.mediaDevices.enumerateDevices().then(function () { getVideoInfo(); })
 
-        
     } else {
         alert('不支持访问用户媒体');
     }
