@@ -6,7 +6,7 @@ var testResultT;  // 当前测试项的文本框
 /**
  * 测试步骤：0-默认， 1-屏幕， 2-活体摄像头， 3-读证卡， 4-录音， 5-签字， 6-扫码
  */
-var testStep = 3;
+var testStep = 0;
 var testStepMax = 6;
 var stepPostion = 0;
 
