@@ -36,9 +36,6 @@ function testResultSubmit(resCode) {
     testResultArr[stepPostion] = result;
 
     console.log("testResultSubmit", testResultArr);
-
-    // downloadExportFile(JSON.stringify(result), "result", "json");
-
     nextPage();
 }
 
@@ -49,6 +46,9 @@ function nextPage() {
     testStep++;
 
     if (testStep > testStepMax) {
+        //所有测试项完毕
+        downloadExportFile(JSON.stringify(testResultArr), "result", "json");
+
         testStep = 0;
     }
     console.log("testStep: " + testStep);
@@ -63,7 +63,6 @@ function nextPage() {
 
     switch (testStep) {
         case 2:
-            // openLiveCamera(1, 0);
             readyToCameraTest();
             break;
 
@@ -550,6 +549,7 @@ function startRecordingTest() {
     //先播放预设音频
     recordingResultButton.style.display = 'block';
     recordingResultButton2.style.display = 'none';
+    audioContainer.style.display = 'block';
     audioPlayer.src = "./assets/ringing.wav";
     audioPlayer.onloadedmetadata = event => { audioPlayer.play(); };
     audioPlayer.onended = event => {
@@ -580,6 +580,7 @@ async function startRecording() {
 
         setTimeout(function () {
             testResultT.value = "录音停止, 开始播放";
+            recordingResultButton2.style.display = 'block';
             stopRecording();
         }, 6000);
     } catch (error) {
@@ -603,9 +604,6 @@ function recordTestResultSubmit(testResult) {
         case 0:
             //扬声器测试通过
             recordingResultButton.style.display = 'none';
-
-            recordingResultButton2.style.display = 'block';
-
             setTimeout(function () {
                 testResultT.value = "录音中...";
                 startRecording();
