@@ -60,7 +60,7 @@
                 </div>
                 <div style="width: 100%; text-align: center;">
                     <div class="panel_camera">
-                        <select id="device_select" class="device_select" onchange="selectCamera(this.value, 0)">
+                        <select id="device_select" class="device_select" onchange="selectCameraChange(0)">
                         </select>
 
                         <div class="resolute_span" id="resolute_span">
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="panel_camera">
-                        <select id="device_select_second" class="device_select" onchange="selectCamera(this.value, 1)">
+                        <select id="device_select_second" class="device_select" onchange="selectCameraChange(1)">
                         </select>
 
                         <div class="resolute_span" id="resolute_span_second">
@@ -95,8 +95,8 @@
             <div class="canvas_panel" id="canvas_panel">
                 <canvas class="canvas_camera" id="canvas_camera"></canvas>
                 <div>
-                <button class="default_mbtn_danger main_button" onclick="closeCanvas()">关闭</button>
-            </div>
+                    <button class="default_mbtn_danger main_button" onclick="closeCanvas()">关闭</button>
+                </div>
             </div>
         </div>
 
@@ -121,25 +121,21 @@
         <!-- 录音测试 -->
         <div class="contain_main_item">
             <h1>录音设备测试</h1>
-            <div id="btn_group_record">
-                <h3>点击下面的按钮来测试录音设备：</h3>
-                <button class="default_mbtn main_button" id="start-recording" onclick="startRecording()">开始录音</button>
-                <button class="default_mbtn main_button" id="stop-recording" onclick="stopRecording()"
-                    disabled>停止录音</button>
-                <div id="audio-container">
-                    <h2>录音播放</h2>
-                    <audio controls id="audio-player"></audio>
-                </div>
-
+            <div id="audio-container">
+                <h2>音频播放</h2>
+                <audio controls id="audio-player"></audio>
             </div>
             <textarea class="textarea_test_result" id="textarea_record_test" placeholder="测试结果补充说明..."></textarea>
 
-            <div>
+            <div id="btn_group_record_result">
                 <button class="default_mbtn_danger main_button" onclick="recordTestResultSubmit(-1)">扬声器故障</button>
-                <button class="default_mbtn_danger main_button" onclick="recordTestResultSubmit(-2)">录音故障</button>
                 <button class="default_mbtn_success main_button" onclick="recordTestResultSubmit(0)">通过</button>
             </div>
 
+            <div id="btn_group2_record_result">
+                <button class="default_mbtn_danger main_button" onclick="recordTestResultSubmit(-2)">录音故障</button>
+                <button class="default_mbtn_success main_button" onclick="recordTestResultSubmit(1)">通过</button>
+            </div>
         </div>
 
         <!-- 签字测试 -->

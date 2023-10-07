@@ -199,7 +199,7 @@ function takePictureEvnt(i) {
     liveCtx.drawImage(video[i], 0, 0, defaultCameraWidth[i], defaultCameraHeight[i]);
 }
 
-function getStream(i) {
+function getStream(index, i) {
     clearVideo(i);
     function success(stream) {
         //兼容webkit核心浏览器
@@ -215,7 +215,8 @@ function getStream(i) {
         console.log('访问用户媒体设备失败' + error);
     }
 
-    var deviceId = cameraInfo[i].camera_name;
+    var deviceId = cameraInfo[index].camera_name;
+    console.log('deviceId: ' + deviceId, cameraInfo);
     videoSelect.forEach(function (v) {
         if (v.label.indexOf(deviceId) == 0) {
             deviceId = v.deviceId;
@@ -224,8 +225,8 @@ function getStream(i) {
     var constraints = {
         audio: true,
         video: {
-            width: defaultCameraWidth[i],
-            height: defaultCameraHeight[i],
+            width: defaultCameraWidth[index],
+            height: defaultCameraHeight[index],
             deviceId: { exact: deviceId }
         }
 
@@ -293,10 +294,16 @@ function getVideoInfo() {
 };
 
 function selectCamera(index, i) {
+    console.log("selectCamera", index, i);
     var resoluteInfo = cameraInfo[index].resolution_info[0];
     defaultCameraHeight[i] = resoluteInfo.height;
     defaultCameraWidth[i] = resoluteInfo.width;
-    getStream(i);
+    getStream(index, i);
+}
+
+function selectCameraChange(i){
+    var index = live_device_select[i].value;
+    selectCamera(index, i);
 }
 
 function readyToCameraTest() {
@@ -534,14 +541,20 @@ function dealCardNum(cardStr) {
 var mediaRecorder;
 var audioChunks = [];
 var audioPlayer = document.getElementById('audio-player');
-var startRecordingButton = document.getElementById('start-recording');
-var stopRecordingButton = document.getElementById('stop-recording');
 var audioContainer = document.getElementById('audio-container');
+var recordingResultButton = document.getElementById('btn_group_record_result');
+var recordingResultButton2 = document.getElementById('btn_group2_record_result');
+
 
 function startRecordingTest() {
     //先播放预设音频
+    recordingResultButton.style.display = 'block';
+    recordingResultButton2.style.display = 'none';
     audioPlayer.src = "./assets/ringing.wav";
     audioPlayer.onloadedmetadata = event => { audioPlayer.play(); };
+    audioPlayer.onended = event => {
+        testResultT.value = "播放完毕";
+    };
 }
 
 
@@ -560,11 +573,15 @@ async function startRecording() {
             var audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
             audioPlayer.src = URL.createObjectURL(audioBlob);
             audioContainer.style.display = 'block';
+            audioPlayer.onloadedmetadata = event => { audioPlayer.play(); };
         };
 
         mediaRecorder.start();
-        startRecordingButton.disabled = true;
-        stopRecordingButton.disabled = false;
+
+        setTimeout(function () {
+            testResultT.value = "录音停止, 开始播放";
+            stopRecording();
+        }, 6000);
     } catch (error) {
         console.error('无法获取录音设备:', error);
     }
@@ -573,15 +590,31 @@ async function startRecording() {
 function stopRecording() {
     if (mediaRecorder && mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
-        startRecordingButton.disabled = false;
-        stopRecordingButton.disabled = true;
     }
 }
 
+// 录音设备测试结果
 function recordTestResultSubmit(testResult) {
+
     audioPlayer.pause();
+    audioContainer.style.display = 'none';
+
     switch (testResult) {
         case 0:
+            //扬声器测试通过
+            recordingResultButton.style.display = 'none';
+
+            recordingResultButton2.style.display = 'block';
+
+            setTimeout(function () {
+                testResultT.value = "录音中...";
+                startRecording();
+            }, 5000);
+
+            testResultT.value = "5秒后开始录音";
+            break;
+        case 1:
+            //录音测试通过
             testResultSubmit(0);
             break;
         case -1:
@@ -789,7 +822,7 @@ function againSignCallback() {
 }
 
 function signTestResultSubmit(result) {
-    sign.sCloseDevice(function () {});
+    sign.sCloseDevice(function () { });
     testResultSubmit(result);
 }
 
@@ -819,7 +852,7 @@ function barcodeInput(event) {
     }
 }
 
-function startBarcodeScannerTest(){
+function startBarcodeScannerTest() {
     barcodeScannerInput.focus();
 }
 
