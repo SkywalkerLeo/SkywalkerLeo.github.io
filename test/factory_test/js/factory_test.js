@@ -574,6 +574,7 @@ async function startRecording() {
             audioPlayer.src = URL.createObjectURL(audioBlob);
             audioContainer.style.display = 'block';
             audioPlayer.onloadedmetadata = event => { audioPlayer.play(); };
+            stream.stop();
         };
 
         mediaRecorder.start();
