@@ -26,6 +26,8 @@ function testResultSubmit(resCode) {
     } else {
         //测试不通过
         var testResultMessage = testResultT.value;
+        testResultMessage = testResultMessage.replace("\r\n", "");
+        testResultMessage = testResultMessage.replace("\n", "");
         console.log("测试不通过: " + testResultMessage);
         result.resCode = resCode;
         result.message = testResultMessage;
@@ -812,10 +814,8 @@ function barcodeInput(event) {
             testResultT.value = "扫码正确";
             // testResultT.value = "扫码正确 \r\n\r\n样例数据: " + barcodeBrochureStr + "\r\n\r\n扫描数据: " + inputStr;
         } else {
-            testResultT.value = "扫码比对不一致 \r\n\r\n样例数据: " + barcodeBrochureStr + "\r\n\r\n扫描数据: " + inputStr;
+            testResultT.value = "扫码比对不一致 \r\n\r\n 样例数据: " + barcodeBrochureStr + " \r\n\r\n 扫描数据: " + inputStr;
         }
-    } else {
-
     }
 }
 
