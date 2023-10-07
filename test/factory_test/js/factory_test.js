@@ -69,6 +69,10 @@ function nextPage() {
             startReaderTest(0);
             break;
 
+            case 4:
+                startRecordingTest();
+                break;
+
         case 6:
             var barcodeInput = document.getElementById("barcode_con_input");
             barcodeInput.value = "";
@@ -529,6 +533,12 @@ var audioPlayer = document.getElementById('audio-player');
 var startRecordingButton = document.getElementById('start-recording');
 var stopRecordingButton = document.getElementById('stop-recording');
 var audioContainer = document.getElementById('audio-container');
+
+function startRecordingTest(){
+    audioPlayer.src = "./assets/ringing.wav";
+    audioPlayer.startPlay();
+}
+
 
 async function startRecording() {
     try {
