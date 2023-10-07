@@ -786,6 +786,11 @@ function againSignCallback() {
     canvasCreate();
 }
 
+function signTestResultSubmit(result) {
+    sign.sCloseDevice(function () {});
+    testResultSubmit(result);
+}
+
 /**
  * 签字测试 -end
  */
