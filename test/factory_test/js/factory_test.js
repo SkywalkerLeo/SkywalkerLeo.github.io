@@ -272,7 +272,7 @@ function getVideoInfo() {
                     }
                     live_device_select[0].value = 0;
                     selectCamera(0, 0);
-                    live_device_select[0].value = 0;
+                    live_device_select[1].value = 1;
                     selectCamera(1, 1);
                 } else {
                     testResultT.value += "获取设备信息失败：" + JSON.stringify(retcode) + "\r\n\r\n";
