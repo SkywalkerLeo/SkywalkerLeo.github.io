@@ -186,7 +186,7 @@ var canvasPanel = document.getElementById('canvas_panel');
 function takePictureEvnt(i) {
     document.getElementById('canvas_panel').style.display = 'block';
     liveCtx = liveCanvas.getContext("2d");
-    liveCtx.drawImage(video[i], 0, 0, defaultCameraWidth[i], defaultCameraHeight[i]);
+    liveCtx.drawImage(video[i], 0, 0);
 }
 
 function getStream(i) {
