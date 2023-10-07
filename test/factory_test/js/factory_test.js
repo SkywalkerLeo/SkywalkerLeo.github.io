@@ -234,7 +234,7 @@ function getUserMedia(constraints, success, error) {
         //firfox浏览器
         navigator.mozGetUserMedia(constraints, success, error);
     } else if (navigator.getUserMedia) {
-        旧版API
+        //旧版API
         navigator.getUserMedia(constraints, success, error);
     }
 }
@@ -244,7 +244,7 @@ function getVideoInfo() {
     navigator.mediaDevices.enumerateDevices()
         .then(function (deviceInfos) {
             console.log("deviceInfos", deviceInfos);
- 
+
             var j = 0;
             for (var i = 0; i < deviceInfos.length; ++i) {
                 if (deviceInfos[i].kind === 'videoinput') {
@@ -284,19 +284,13 @@ function selectCamera(index, i) {
 }
 
 function readyToCameraTest() {
-    
+
     //首次运行引导用户，信任域名
     if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
         //调用用户媒体设备, 访问摄像头
-        getUserMedia({
-            video: {
-                width: 640,
-                height: 480
-            }
-    
-        }, function(){}, function(){});
+        getUserMedia({ audio: true, video: true }, function () {navigator.mediaDevices.enumerateDevices().then(function(){getVideoInfo();}) }, function () { });
 
-        getVideoInfo();
+        
     } else {
         alert('不支持访问用户媒体');
     }
